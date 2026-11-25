@@ -59,6 +59,12 @@ from pathlib import Path
 
 
 def main() -> None:
+    # The gate counts characters, not bytes: hold the line
+    # to the 140-character cap before anything is written,
+    # so a future wording tweak can never ship an invalid
+    # entry by accident.
+    assert 1 <= len(TEXT.strip()) <= 140, "entry line out of range"
+    assert TEXT.count("\n") == 1 and TEXT.endswith("\n")
     os.umask(0o022)
     out_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
     out_dir.mkdir(parents=True, exist_ok=True)
